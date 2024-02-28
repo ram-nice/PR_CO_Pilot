@@ -13,10 +13,9 @@ const addLog = (type, index)=>{
 const checkInLine = (keyword, line, index)=>{
     line.match(new RegExp(keyword)) && addLog(keyword,index+1);
 }
-function findMistakesInStylesFile(File) {
+function findMistakesInStylesFile(fileContent) {
     // Parse CSS files
-        const content = fs.readFileSync(File, 'utf-8');
-        const lines = content.split('\n');
+        const lines = fileContent.split('\n');
         lines.map((line, index) =>{
             line=line.trim();
             if(line.match(/\$/)){
@@ -29,7 +28,6 @@ function findMistakesInStylesFile(File) {
             checkInLine('px',line, index);
             checkInLine('!important',line, index);
             checkInLine('#',line, index);
-            
         });
 
     // Generate report
@@ -44,7 +42,7 @@ function findMistakesInStylesFile(File) {
 
 // Get command-line arguments excluding the first two elements (node executable and script path)
 const args = process.argv.slice(1);
-
+const content = fs.readFileSync(args[1], 'utf-8');
 // Check if there are enough arguments
 if (args.length !== 2  ) {
     console.error('Usage: node script.js <file1>');
@@ -54,7 +52,7 @@ if (args.length !== 2  ) {
 // Separate CSS and TSX files based on file extension
 if (args[1].endsWith('styles.ts')){
     console.log(`checking the style file ${args[1]} ...`);
-    const result = findMistakesInStylesFile(args[1]);
+    const result = findMistakesInStylesFile(content);
     console.error("Found below mistakes :", result.corrections);
 }
 else if(args[1].endsWith('spec.ts')){

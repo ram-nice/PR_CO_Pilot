@@ -1,6 +1,6 @@
 const fs = require('fs');
 const cssErrorMap = new Map([['px','px value found, use rem instead. 1 px = 0.0625 rem do the math !'],
-['!','!important found, try not to use override'],
+['!important','!important found, try not to use override'],
 ['#','hex code is found, use color from themes'],
 ['?','optional chaining can be added, please re-check']
 ]);
@@ -10,22 +10,26 @@ let corrections = new Set();
 const addLog = (type, index)=>{
     corrections.add(`at line number ${index}, ${cssErrorMap.get(type)}`);
 };
-
+const checkInLine = (keyword, line, index)=>{
+    line.match(new RegExp(keyword)) && addLog(keyword,index+1);
+}
 function findMistakesInStylesFile(File) {
     // Parse CSS files
         const content = fs.readFileSync(File, 'utf-8');
         const lines = content.split('\n');
         lines.map((line, index) =>{
+            line=line.trim();
             if(line.match(/\$/)){
                 const subLine = line.substring(line.indexOf('{'), line.indexOf('}'));
                 const operatorIndex = [subLine.indexOf('?'),subLine.indexOf('.'),subLine.lastIndexOf('?'),subLine.lastIndexOf('.')];
                 if((operatorIndex[0] !== (operatorIndex[1]-1))||(operatorIndex[2] !== (operatorIndex[3]-1))){
                     addLog('?',index+1);
                 }
-            } 
-            line.match(/px/) && addLog('px',index+1);
-            line.match(/!important/) && addLog('!',index+1);
-            line.match(/#/) && addLog('#',index+1);
+            };
+            checkInLine('px',line, index);
+            checkInLine('!important',line, index);
+            checkInLine('#',line, index);
+            
         });
 
     // Generate report

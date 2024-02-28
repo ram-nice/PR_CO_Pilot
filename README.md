@@ -1,25 +1,28 @@
 # PR CO-Pilot
-a simple script file which will help us to check the changes and suggest corrections before raising pr
-
-checks needed
+A script that assists in reviewing modifications and proposing corrections prior to submitting a pull request.
 
 
-styles file : 
-1) no important in styles file. (search for !important should return nothing). added in utility.
-2) all colors should come from theme.palette. (search for # should return nothing). added in utility.
-3) no use of px.(search for px should return nothing). added in utility.
-4) use ternary in theme related values. added in utility.
-5) checkdev comments.
+# Code Review Checklist
 
-tsx files:
-1) remove unused imports.
-2) give proper comments for methods.
-3) no return comment needed for void methods.
-4) no use of any. (added in util)
-5) static values are forbidden. ()
-6) no redundant code.
-7) only single quotes.(added to util)
-8) convert if else to ternary
-9) convert if to && or ?? operator
-10) styles should be moved to styles file(added to util);
-11) no console.log should be present
+## Styles File
+
+- [ ] Ensure there are no `!important` declarations in the styles file.
+- [ ] Confirm that all colors are sourced from `theme.palette`.
+- [ ] Verify that there is no use of `px` units.
+- [ ] Make sure ternary operators(optional chaining) are used for theme-related values. Added in utility.
+
+
+## TSX Files
+
+- [ ] Remove any unused imports.
+- [ ] Provide proper comments for methods.
+- [ ] Avoid return comments for void methods.
+- [ ] Eliminate the use of `any`. (Added in util)
+- [ ] Static values are forbidden. ()
+- [ ] Remove redundant code.
+- [ ] Ensure only single quotes are used. (Added in util)
+- [ ] Convert `if-else` statements to ternary operators.
+- [ ] Convert `if` statements to `&&` or `??` operators.
+- [ ] Move styles from TSX files to the styles file. (Added in util)
+- [ ] Ensure no `console.log` statements are present.
+

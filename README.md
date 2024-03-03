@@ -4,7 +4,7 @@ A script that assists in reviewing modifications and proposing corrections prior
 # Steps to use : 
 - open terminal from pr co-pilot folder.
 - node professor.js filePath.
-## ps:currently it accepts only one file and checks the entire file.
+## ps:currently it accepts only multiple file as input and checks the entire file.
 # Code Review Checklist
 
 ## Styles File

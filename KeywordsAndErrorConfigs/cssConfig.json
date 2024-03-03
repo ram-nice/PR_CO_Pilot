@@ -1,6 +1,8 @@
 {
     "keywords":["px","!important","#"],
-    "px":"px value found, use rem instead. 1 px = 0.0625 rem do the math !",
-    "!important":"!important found, try not to use override",   
-    "#":"hex code is found, use color from themes"   
+    "errors":{
+        "px":"px value found, use rem instead. 1 px = 0.0625 rem do the math !",
+        "!important":"!important found, try not to use override",   
+        "#":"hex code is found, use color from themes"
+    }
 }

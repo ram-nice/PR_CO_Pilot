@@ -1,4 +1,4 @@
 {
     "keywords":["?"],
-    "?":"optional chaining can be added, please re-check"
+    "errors":{"?":"optional chaining can be added, please re-check"}
 }

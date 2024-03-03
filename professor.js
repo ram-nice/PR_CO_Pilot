@@ -1,33 +1,20 @@
 const fs = require('fs');
 
-const cssErrorObj = {
-    'px':'px value found, use rem instead. 1 px = 0.0625 rem do the math !',
-    '!important':'!important found, try not to use override',   
-    '#':'hex code is found, use color from themes'   
-};
-
-const tsxErrorObj = {
-    'any':'key word any found, try to use proper type or create an interface',
-    '"':'double quotes have been found, we use single quotes across the project',
-    'px':'inline styles have been found, consider moving styles to the style file, all the styles must come from styles file',
-    'console':'please remove console messages',         
-}
-
-const commonErrorObj ={
-    '?':'optional chaining can be added, please re-check'
-}
+const cssConfig = require('./KeywordsAndErrorConfigs/cssConfig.json');
+const tsxConfig = require('./KeywordsAndErrorConfigs/tsxConfig.json');
+const commonConfig = require('./KeywordsAndErrorConfigs/commonConfig.json');
 
 let corrections = new Set();
 
 const addLog = (checkType, index, fileType)=>{
     if(fileType === 'css'){
-        corrections.add(`at line number ${index}, ${cssErrorObj[checkType]}`);
+        corrections.add(`at line number ${index}, ${cssConfig[checkType]}`);
     }
     else if(fileType === 'tsx'){
-        corrections.add(`at line number ${index}, ${tsxErrorObj[checkType]}`);
+        corrections.add(`at line number ${index}, ${tsxConfig[checkType]}`);
     }
     else if(fileType === 'common'){
-        corrections.add(`at line number ${index}, ${commonErrorObj[checkType]}`);
+        corrections.add(`at line number ${index}, ${commonConfig[checkType]}`);
     }
 };
 
@@ -87,32 +74,42 @@ const displayResults=(corrections)=> {
 console.log('check completed');
 console.log('-------------------------------------------------------------------------------')
 }
-// Get command-line arguments excluding the first two elements (node executable and script path)
-const args = process.argv.slice(1);
+
+
+let args = process.argv.slice(2);
 const content = fs.readFileSync(args[1], 'utf-8');
 console.log('-------------------------------------------------------------------------------');
 console.log('Initialising...');
+
 // Check if there are enough arguments
 if (args.length < 2  ) {
     console.error('Usage: node script.js <file1> <file2>');
     process.exit(1);
 }
 
-// Separate CSS and TSX files based on file extension
-if (args[1].endsWith('styles.ts')){
-    console.log(`checking the style file ${args[1]} ...`);
-    const result = findMistakesInStylesFile(content);
-    displayResults(result.corrections);
-}
-else if(args[1].endsWith('spec.ts')){
-    console.log(`checking the tests in file ${args[1]} ...`);
-}
-else if(args[1].endsWith('.tsx')){
-    console.log(`checking the Component file ${args[1]} ...`);
-    const result = findMistakesInComponentFile(args[1]);
-    displayResults(result.corrections);
-}
-else{
-    console.error('Apologies !, Currently we dont support this extension');
-    process.exit(1);
-}
+args = args.slice(1);
+
+args.map((file)=>{
+    const fileName = file.split('\\')[file.split('\\').length - 1];
+    const fileExt = fileName.slice(fileName.indexOf('.'));
+   // loadConfigs(fileName,fileExt);
+    if (file.endsWith('styles.ts')){
+        console.log(`checking the style file ${fileName} ${fileExt}...`);
+        const result = findMistakesInStylesFile(content);
+        displayResults(result.corrections);
+    }
+    else if(file.endsWith('spec.ts')){
+        console.log(`checking the tests in file ${file} ...`);
+    }
+    else if(file.endsWith('.tsx')){
+        console.log(`checking the Component file ${file} ${fileExt}...`);
+        const result = findMistakesInComponentFile(file);
+        displayResults(result.corrections);
+    }
+    else{
+        console.log(`checking the file ${fileName} ${fileExt}...`);
+        console.error('Apologies !, Currently we dont support this extension');
+        process.exit(1);
+    }
+})
+

@@ -1,0 +1,7 @@
+{
+    "keywords":["any","\"","px","console"],
+    "any":"key word any found, try to use proper type or create an interface",
+    "\"":"double quotes have been found, we use single quotes across the project",
+    "px":"inline styles have been found, consider moving styles to the style file, all the styles must come from styles file",
+    "console":"please remove console messages"         
+}
